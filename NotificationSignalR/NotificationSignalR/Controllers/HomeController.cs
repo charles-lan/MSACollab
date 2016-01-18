@@ -14,5 +14,10 @@ namespace NotificationSignalR.Controllers
 
             return View();
         }
+
+        public ActionResult Chat()
+        {
+            return View();
+        }
     }
 }

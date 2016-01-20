@@ -1,6 +1,6 @@
 ﻿ $(function () {
             // Reference the auto-generated proxy for the hub.
-            var chat = $.connection.notificationHub;
+            var chat = $.connection.notifHub;
             // Create a function that the hub can call back to display messages.
             //Clients will do this, defined in the hub.
             chat.client.addNewMessageToPage = function (name, message) {
@@ -35,4 +35,4 @@
         function htmlEncode(value) {
             var encodedValue = $('<div />').text(value).html();
             return encodedValue;
-        }y
+        }

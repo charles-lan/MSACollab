@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace NotificationSignalR.Hubs
 {
-    public class NotificationHub : Hub
+    [HubName("notifHub")]
+    public class NotificationHub : Microsoft.AspNet.SignalR.Hub
     {
         public void Hello()
         {

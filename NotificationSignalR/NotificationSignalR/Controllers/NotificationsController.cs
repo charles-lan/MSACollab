@@ -56,7 +56,7 @@ namespace NotificationSignalR.Controllers
             try
             {
                 db.SaveChanges();
-                var _context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -84,6 +84,10 @@ namespace NotificationSignalR.Controllers
 
             db.Notifications.Add(notification);
             db.SaveChanges();
+
+            var _context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+            _context.Clients.All.receiveNotification(notification.title);
+
 
             return CreatedAtRoute("DefaultApi", new { id = notification.ID }, notification);
         }

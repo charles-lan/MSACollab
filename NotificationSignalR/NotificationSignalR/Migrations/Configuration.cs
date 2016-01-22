@@ -13,16 +13,18 @@ namespace NotificationSignalR.Migrations
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(NotificationSignalR.Models.NotificationSignalRContext context)
-        {
+        //protected override void Seed(NotificationSignalR.Models.NotificationSignalRContext context)
+        //{
 
-            context.Notifications.AddOrUpdate(
-              p => p.ID,
-              new Notification { title = "Testing",desc="A new item has been added" },
-              new Notification { title = "Testing", desc = "An item has been deleted" },
-              new Notification { title = "Testing", desc = "An item has been updated." }
-            );
+        //    context.Notifications.AddOrUpdate(
+        //      p => p.ID,
+        //      new Notification { title = "Testing",desc="A new item has been added",date=DateTime.Now, groups = new Group[] {
+        //      }
+        //      },
+        //      new Notification { title = "Testing", desc = "An item has been deleted", date = DateTime.Now, groups =["Shop", "North"] },
+        //      new Notification { title = "Testing", desc = "An item has been updated.", date = DateTime.Now, groups =["Police", "North"] }
+        //    );
 
-        }
+        //}
     }
 }

@@ -6,11 +6,12 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using NotificationSignalR.Models;
-using NotificationSignalR.Hubs;
 using Microsoft.AspNet.SignalR;
+using NotificationSignalR.Hubs;
 
 namespace NotificationSignalR.Controllers
 {
@@ -26,9 +27,9 @@ namespace NotificationSignalR.Controllers
 
         // GET: api/Notifications/5
         [ResponseType(typeof(Notification))]
-        public IHttpActionResult GetNotification(int id)
+        public async Task<IHttpActionResult> GetNotification(int id)
         {
-            Notification notification = db.Notifications.Find(id);
+            Notification notification = await db.Notifications.FindAsync(id);
             if (notification == null)
             {
                 return NotFound();
@@ -39,7 +40,7 @@ namespace NotificationSignalR.Controllers
 
         // PUT: api/Notifications/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutNotification(int id, Notification notification)
+        public async Task<IHttpActionResult> PutNotification(int id, Notification notification)
         {
             if (!ModelState.IsValid)
             {
@@ -55,8 +56,7 @@ namespace NotificationSignalR.Controllers
 
             try
             {
-                db.SaveChanges();
-                
+                await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -75,7 +75,7 @@ namespace NotificationSignalR.Controllers
 
         // POST: api/Notifications
         [ResponseType(typeof(Notification))]
-        public IHttpActionResult PostNotification(Notification notification)
+        public async Task<IHttpActionResult> PostNotification(Notification notification)
         {
             if (!ModelState.IsValid)
             {
@@ -83,27 +83,25 @@ namespace NotificationSignalR.Controllers
             }
 
             db.Notifications.Add(notification);
-            db.SaveChanges();
-
+            await db.SaveChangesAsync();
             var _context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
             _context.Clients.All.receiveNotification(notification.title);
-
 
             return CreatedAtRoute("DefaultApi", new { id = notification.ID }, notification);
         }
 
         // DELETE: api/Notifications/5
         [ResponseType(typeof(Notification))]
-        public IHttpActionResult DeleteNotification(int id)
+        public async Task<IHttpActionResult> DeleteNotification(int id)
         {
-            Notification notification = db.Notifications.Find(id);
+            Notification notification = await db.Notifications.FindAsync(id);
             if (notification == null)
             {
                 return NotFound();
             }
 
             db.Notifications.Remove(notification);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
 
             return Ok(notification);
         }

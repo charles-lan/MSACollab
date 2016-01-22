@@ -197,6 +197,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -207,7 +208,12 @@
     <Compile Include="Migrations\201601192235092_initialCreate.Designer.cs">
       <DependentUpon>201601192235092_initialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601212135408_Foobar1.cs" />
+    <Compile Include="Migrations\201601212135408_Foobar1.Designer.cs">
+      <DependentUpon>201601212135408_Foobar1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\NotificationSignalRContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -284,6 +290,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201601192235092_initialCreate.resx">
       <DependentUpon>201601192235092_initialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601212135408_Foobar1.resx">
+      <DependentUpon>201601212135408_Foobar1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

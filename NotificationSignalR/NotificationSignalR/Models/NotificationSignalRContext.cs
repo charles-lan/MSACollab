@@ -18,7 +18,8 @@ namespace NotificationSignalR.Models
         public NotificationSignalRContext() : base("name=NotificationSignalRContext")
         {
         }
-
         public System.Data.Entity.DbSet<NotificationSignalR.Models.Notification> Notifications { get; set; }
+
+        public System.Data.Entity.DbSet<NotificationSignalR.Models.Group> Groups { get; set; }
     }
 }

@@ -10,10 +10,10 @@ namespace NotificationSignalR.Models
     {
         
         public int ID { get; set; }
-        public string title { get; set; }
-        public string desc { get; set; }
+        public string Title { get; set; }
+        public string Desc { get; set; }
         [DataType(DataType.Date)]
-        public DateTime date { get; set; }
-        public virtual ICollection<Group> groups { get; set; }
+        public DateTime Date { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
     }
 }

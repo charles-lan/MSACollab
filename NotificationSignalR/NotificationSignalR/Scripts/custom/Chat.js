@@ -1,38 +1,59 @@
 ﻿ $(function () {
-            // Reference the auto-generated proxy for the hub.
-            var chat = $.connection.notifHub;
-            // Create a function that the hub can call back to display messages.
-            //Clients will do this, defined in the hub.
-            chat.client.addNewMessageToPage = function (name, message) {
-                // Add the message to the page.
-                $('#discussion').append('<li><strong>' + htmlEncode(name)
-                    + '</strong>: ' + htmlEncode(message) + '</li>');
-            };
 
-            chat.client.receiveNotification = function (message) {
-                $("#popUpContainer").html(message);
-                $("#popUpContainer").slideDown(2000);
-                setTimeout('$("#popUpContainer").slideUp(2000);', 2000);
-            };
+     var chat = $.connection.notifHub;
 
-            // Get the user name and store it to prepend to messages.
-            $('#displayname').val(prompt('Enter your name:', ''));
-            // Set initial focus to message input box.
-            $('#message').focus();
-            // Start the connection.
-            $.connection.hub.start().done(function () {
-                $('#sendmessage').click(function () {
-                    // Call the Send method on the hub.
-                    chat.server.send($('#displayname').val(), $('#message').val());
-                    // Sends the message for a pop up to appear.
-                    chat.server.sendNotifications("New Message:" + $('#message').val());
-                    // Clear text box and reset focus for next comment.
-                    $('#message').val('').focus();
-                });
-            });
-        });
-        // This optional function html-encodes messages for display in the page.
-        function htmlEncode(value) {
-            var encodedValue = $('<div />').text(value).html();
-            return encodedValue;
-        }
+     chat.client.receiveNotification = function (message) {
+         $("#popUpContainer").html(message);
+         $("#popUpContainer").slideDown(2000);
+         setTimeout('$("#popUpContainer").slideUp(2000);', 2000);
+     };
+
+     chat.client.addNewMessageToPage = function (groupname, message) {
+         $('#notiflist').append('<li><strong>' + htmlEncode(groupname)
+             + '</strong>: ' + htmlEncode(message) + '</li>');
+     };
+
+     chat.client.addUserToGroup = function (groupname, userid) {
+         if (groupname == "g1") {
+             $('#group1list').append('<li>' + userid + '</li>');
+         } else if (groupname == "g2") {
+             $('#group2list').append('<li>' + userid + '</li>');
+         } else if (groupname == "g3") {
+             $('#group3list').append('<li>' + userid + '</li>');
+         } else {
+             console.log("invalid groupname : " + groupname);
+         }
+     }
+
+     $('#message').focus();
+     $.connection.hub.start().done(function () {
+         $('#sendmessage').click(function () {
+             chat.server.send($('#groupselected').val(), $('#message').val());
+             
+             var newtr = document.createElement('tr');
+             var newtd = document.createElement('td');
+
+             newtd = $('#groupselected').val();
+             newtr.appendChild(newtd);
+             newtd = $('#message').val();
+             newtr.appendChild(newtd);
+             $('#notiftable').append(newtr);
+
+             chat.server.sendNotifications($('#groupselected').val(), "New Message:" + $('#message').val());
+             $('#message').val('').focus();
+         });
+
+         $("input[type='radio'][name='grouprad']").click(function () {
+             var selectedgroup = $("input[type='radio'][name='grouprad']:checked");
+             if (selectedgroup.length > 0) {
+                 selectedgroup = selectedgroup.val();
+                 chat.server.joinGroup(selectedgroup);
+             }
+         });
+     });
+ });
+
+ function htmlEncode(value) {
+     var encodedValue = $('<div />').text(value).html();
+     return encodedValue;
+ }

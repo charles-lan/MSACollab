@@ -25,11 +25,13 @@ namespace NotificationSignalR.Hubs
         {
             if(groupname == "all")
             {
-                Clients.All.addNewMessageToPage(message);
+                Clients.All.sendMessageToUser(groupname, message);
             } else
             {
-                Clients.Group(groupname).addNewMessageToPage(message);
+                Clients.Group(groupname).sendMessageToUser(groupname, message);
             }
+
+            Clients.All.addNewMessageToPage(groupname, message);
         }
 
         public Task JoinGroup(string groupname)

@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "Notification";
+}
+
+
+
+<h2>Notification</h2>
+
+
+<table>
+    <tr>
+        <td>
+            <input type="text" id="message" />
+            <input type="button" id="sendmessage" value="Send" />
+            <input type="hidden" id="selecteduser" />
+        </td>
+        <td>
+            <ul id="userlist">
+                <li>Users online</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td rowspan="2">
+            <table id="notiftable">
+                <thead>
+                    <tr>
+                        <td>
+                            UserID
+                        </td>
+                        <td>
+                            Notification
+                        </td>
+                        <td>
+                            Time sent
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+
+@section scripts {
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <link href="~/css/notification.css" rel="stylesheet" />
+    <script>
+        $(function () {
+
+            var nhub = $.connection.notifHub;
+
+            nhub.client.receiveNotification = function (message) {
+                $("#popUpContainer").html(message);
+                $("#popUpContainer").slideDown(2000);
+                setTimeout('$("#popUpContainer").slideUp(2000);', 2000);
+            };
+
+            nhub.client.addMessageToAdmin = function (userid, message, time) {
+                    $('#notiftable tbody').append('<tr><td>' + userid + '</td><td>' + message + '</td><td>' + time + '</td></tr>');
+            };
+
+            nhub.client.addUser = function (userid) {
+
+                if ($('#userlist li:contains(' + userid + ')').length) {
+                    return;
+                } else {
+                    var newuser = document.createElement("li");
+                    var ul = document.getElementById("userlist");
+
+                    var anchor = document.createElement("a");
+                    anchor.innerHTML = htmlEncode(userid);
+                    anchor.onclick = function () {
+                        $('#selecteduser').val(this.innerHTML);
+                    }
+
+                    newuser.appendChild(anchor);
+                    ul.appendChild(newuser);
+                }
+            }
+
+            $('#message').focus();
+            $.connection.hub.start().done(function () {
+
+                $('#sendmessage').click(function () {
+                    if ($('#selecteduser').val() == null || $('#selecteduser').val() == '') {
+                        alert("You must select an user");
+                    } else {
+                        nhub.server.sendMessage($('#selecteduser').val(), $('#message').val());
+                        $('#message').val('').focus();
+                    }
+                });
+            });
+        });
+
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+    </script>
+
+}

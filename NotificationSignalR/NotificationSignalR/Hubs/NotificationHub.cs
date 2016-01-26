@@ -12,57 +12,34 @@ namespace NotificationSignalR.Hubs
     [HubName("notifHub")]
     public class NotificationHub : Microsoft.AspNet.SignalR.Hub
     {
+        public void SendMessage(string userid, string message)
+        {
+            string curr = DateTime.Now.ToString();
+            Clients.All.addMessageToAdmin(userid, message, curr);
+            Clients.Group(userid).addMessageToUser(message, curr);
+        }
 
-        static Dictionary<string, List<string>> users = new Dictionary<string, List<string>>();
+        public Task AddConnectionId(string userid)
+        {
+            Clients.All.addUser(userid);
+            return Groups.Add(Context.ConnectionId, userid);
+        }
+
+        public Task RemoveConnectionId(string userid)
+        {
+            return Groups.Remove(Context.ConnectionId, userid);
+        }
 
         
-        public void SendNotifications(string groupname, string message)
-        {
-            Clients.Group(groupname).receiveNotification(message);
-        }
-
-        public void Send(string groupname, string message)
-        {
-            if(groupname == "all")
-            {
-                Clients.All.sendMessageToUser(groupname, message);
-            } else
-            {
-                Clients.Group(groupname).sendMessageToUser(groupname, message);
-            }
-
-            Clients.All.addNewMessageToPage(groupname, message);
-        }
-
-        public Task JoinGroup(string groupname)
-        {
-            users[Context.ConnectionId].Add(groupname);
-            Clients.All.addUserToGroup(groupname, Context.ConnectionId);
-            return Groups.Add(Context.ConnectionId, groupname);
-        }
-
-        public Task LeaveGroup(string groupname)
-        {
-            return Groups.Remove(Context.ConnectionId, groupname);
-        }
 
         public override Task OnConnected ()
         {
-            users.Add(Context.ConnectionId, new List<string>());
-            Clients.Client(Context.ConnectionId).getUserId(Context.ConnectionId);
             return base.OnConnected();
         }
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            
-            List<string> s = users[Context.ConnectionId];
-
-            foreach (string i in s)
-            {
-                LeaveGroup(i);
-            }
             return base.OnDisconnected(stopCalled);
-        }
+        }  
     }
 }

@@ -4,25 +4,36 @@
 }
 
 
-
-<h2>Notification</h2>
-
-
 <table>
     <tr>
-        <td>
-            <input type="text" id="message" />
+        <td class="msgcontainer">
+            Notification
+            <br />
+            <br />
+            <input type="text" id="message" value="Enter your message here" size="100"/>
             <input type="button" id="sendmessage" value="Send" />
             <input type="hidden" id="selecteduser" />
         </td>
-        <td>
-            <ul id="userlist">
-                <li>Users online</li>
-            </ul>
+        <td >
+            <table class="userlistcontainer">
+                <thead>
+                    <tr>
+                        <td>User online</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <ul id="userlist">
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </td>
     </tr>
     <tr>
-        <td rowspan="2">
+        <td colspan="2">
             <table id="notiftable">
                 <thead>
                     <tr>
@@ -30,7 +41,7 @@
                             UserID
                         </td>
                         <td>
-                            Notification
+                            Message
                         </td>
                         <td>
                             Time sent
@@ -76,7 +87,14 @@
                     var anchor = document.createElement("a");
                     anchor.innerHTML = htmlEncode(userid);
                     anchor.onclick = function () {
-                        $('#selecteduser').val(this.innerHTML);
+                        if ($('#selecteduser').val() == this.innerHTML) {
+                            this.style.backgroundColor = rgb(254, 143, 69);
+                            $('#selecteduser').val('');
+                        } else {
+                            $('#selecteduser').val(this.innerHTML);
+                            this.style.backgroundColor = rgb(255, 201, 14);
+                        }
+                        
                     }
 
                     newuser.appendChild(anchor);
@@ -84,8 +102,13 @@
                 }
             }
 
+
             $('#message').focus();
             $.connection.hub.start().done(function () {
+
+                $('#message').click(function () {
+                    $('#message').val('');
+                });
 
                 $('#sendmessage').click(function () {
                     if ($('#selecteduser').val() == null || $('#selecteduser').val() == '') {

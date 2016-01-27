@@ -4,12 +4,6 @@
 }
 
 
-<style>
-   
-</style>
-
-
-<h2>Users</h2>
 
 <body>
     User ID: <div id="idpanel"> </div>
@@ -29,6 +23,7 @@
 @section scripts {
     <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
     <script src="~/signalr/hubs"></script>
+<link href="~/css/users.css" rel="stylesheet" />
     <script>
         $(function () {
             var nhub = $.connection.notifHub;

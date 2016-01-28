@@ -9,6 +9,7 @@
     User ID: <div id="idpanel"> </div>
     <input type="hidden" id="userid" />
     <br />
+    <input type="button" id="balloon" value="Press Me!"/> <span id="counter">0</span>
     <table id="notiflist">
         <thead>
             <tr>
@@ -30,14 +31,45 @@
 
 
             nhub.client.addMessageToUser = function (message, time) {
-                $('#notiflist tbody').append('<tr><td>' + message + '</td><td>' + time + '</td></tr>');
+
+                var msgtd = document.createElement("td");
+                var timetd = document.createElement("td");
+                var newtr = document.createElement("tr");
+
+                var msgtxt = document.createTextNode(message);
+                var timetxt = document.createTextNode(time);
+
+                msgtd.appendChild(msgtxt);
+                timetd.appendChild(timetxt);
+
+                newtr.appendChild(msgtd);
+                newtr.appendChild(timetd);
+
+                newtr.style.backgroundColor = "yellow";
+
+                $('#notiflist tbody').append(newtr);
+
+                var total = document.getElementById("counter").innerHTML;
+                total = parseInt(total, 10) + 1;
+                document.getElementById("counter").innerHTML = total;
+                // (+) send api notification.isRead = true;
             }
 
             $.connection.hub.start().done(function () {
+
+                $('#notiflist').hide();
+
                 $('#userid').val(prompt('Enter your UserID : ', ''));
                 document.getElementById("idpanel").innerHTML = $('#userid').val();
 
                 nhub.server.addConnectionId($('#userid').val());
+
+                $('#balloon').click(function () {
+                    $('#notiflist').toggle(200);
+                    document.getElementById("counter").innerHTML = 0;
+                    $('#notiflist tbody tr').css("background-color", "#f6f3f7");
+
+                });
             });
         });
     </script>

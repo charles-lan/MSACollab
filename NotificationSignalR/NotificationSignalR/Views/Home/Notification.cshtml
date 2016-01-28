@@ -12,7 +12,6 @@
             <br />
             <input type="text" id="message" value="Enter your message here" size="100"/>
             <input type="button" id="sendmessage" value="Send" />
-            <input type="hidden" id="selecteduser" />
         </td>
         <td >
             <table class="userlistcontainer">
@@ -66,6 +65,8 @@
 
             var nhub = $.connection.notifHub;
 
+            var selectedusers = [];
+
             nhub.client.receiveNotification = function (message) {
                 $("#popUpContainer").html(message);
                 $("#popUpContainer").slideDown(2000);
@@ -73,13 +74,15 @@
             };
 
             nhub.client.addMessageToAdmin = function (userid, message, time) {
-                    $('#notiftable tbody').append('<tr><td>' + userid + '</td><td>' + message + '</td><td>' + time + '</td></tr>');
+
+                $('#notiftable tbody').append('<tr><td>' + userid + '</td><td>' + message + '</td><td>' + time + '</td></tr>');
             };
 
             nhub.client.addUser = function (userid) {
 
                 if ($('#userlist li:contains(' + userid + ')').length) {
                     return;
+                    //(+) set li colour = backgroundColour;
                 } else {
                     var newuser = document.createElement("li");
                     var ul = document.getElementById("userlist");
@@ -87,12 +90,13 @@
                     var anchor = document.createElement("a");
                     anchor.innerHTML = htmlEncode(userid);
                     anchor.onclick = function () {
-                        if ($('#selecteduser').val() == this.innerHTML) {
-                            this.style.backgroundColor = rgb(254, 143, 69);
-                            $('#selecteduser').val('');
+                        if (jQuery.inArray(this.innerHTML, selectedusers) >= 0) {
+                            var index = jQuery.inArray(this.innerHTML, selectedusers);
+                            this.style.backgroundColor = "rgb(254, 143, 69)";
+                            selectedusers.splice(index, 1);
                         } else {
-                            $('#selecteduser').val(this.innerHTML);
-                            this.style.backgroundColor = rgb(255, 201, 14);
+                            selectedusers.push(this.innerHTML);
+                            this.style.backgroundColor = "rgb(255, 201, 14)";
                         }
                         
                     }
@@ -111,10 +115,11 @@
                 });
 
                 $('#sendmessage').click(function () {
-                    if ($('#selecteduser').val() == null || $('#selecteduser').val() == '') {
+                    if (selectedusers.length < 1) {
                         alert("You must select an user");
                     } else {
-                        nhub.server.sendMessage($('#selecteduser').val(), $('#message').val());
+                        var jsonString = JSON.stringify(selectedusers);
+                        nhub.server.sendMessage(jsonString, $('#message').val());
                         $('#message').val('').focus();
                     }
                 });

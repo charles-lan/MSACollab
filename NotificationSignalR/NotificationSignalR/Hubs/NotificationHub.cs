@@ -12,11 +12,18 @@ namespace NotificationSignalR.Hubs
     [HubName("notifHub")]
     public class NotificationHub : Microsoft.AspNet.SignalR.Hub
     {
-        public void SendMessage(string userid, string message)
+        public void SendMessage(string users, string message)
         {
             string curr = DateTime.Now.ToString();
-            Clients.All.addMessageToAdmin(userid, message, curr);
-            Clients.Group(userid).addMessageToUser(message, curr);
+            string[] userids = new JavaScriptSerializer().Deserialize<string[]>(users);
+
+            foreach (string s in userids)
+            {
+                Clients.Group(s).addMessageToUser(message, curr);
+            }
+
+            Clients.All.addMessageToAdmin(userids, message, curr);
+            
         }
 
         public Task AddConnectionId(string userid)

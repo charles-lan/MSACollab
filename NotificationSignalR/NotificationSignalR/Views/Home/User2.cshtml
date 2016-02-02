@@ -6,29 +6,32 @@
 
 
 <body>
-    User ID: <div id="idpanel"> </div>
-    <input type="hidden" id="userid" />
-    <br />
-    <input type="button" id="balloon" value="Press Me!"/> <span id="counter">0</span>
-    <table id="notiflist">
-        <thead>
-            <tr>
-                <td>Notification</td>
-                <td>Time sent</td>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div class="customcontainer">
+        <div id="idpanel"></div> <span id="popupmsg"></span>
+        <input type="hidden" id="userid" />
+        <br />
+        <div class="balloon">
+            <input type="button" id="pressme" value="Press Me!" /> <span id="counter">0</span>
+        </div>
+        <table id="notiftable">
+            <thead>
+                <tr>
+                    <td>Notification</td>
+                    <td>Time sent</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 </body>
 
 @section scripts {
     <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
     <script src="~/signalr/hubs"></script>
-<link href="~/css/users.css" rel="stylesheet" />
+<link href="~/css/notification.css" rel="stylesheet" />
     <script>
         $(function () {
             var nhub = $.connection.notifHub;
-
 
             nhub.client.addMessageToUser = function (message, time) {
 
@@ -47,27 +50,40 @@
 
                 newtr.style.backgroundColor = "yellow";
 
-                $('#notiflist tbody').append(newtr);
+                $('#notiftable tbody').append(newtr);
 
+                $('#counter').show();
                 var total = document.getElementById("counter").innerHTML;
                 total = parseInt(total, 10) + 1;
                 document.getElementById("counter").innerHTML = total;
+
+                $("#popupmsg").html(message);
+                $("#popupmsg").slideDown(2000);
+                setTimeout('$("#popupmsg").slideUp(2000);', 2000);
+
                 // (+) send api notification.isRead = true;
             }
 
             $.connection.hub.start().done(function () {
 
-                $('#notiflist').hide();
+                $('#popupmsg').hide();
+                $('#counter').hide();
+                $('#notiftable').hide();
 
                 $('#userid').val(prompt('Enter your UserID : ', ''));
                 document.getElementById("idpanel").innerHTML = $('#userid').val();
 
                 nhub.server.addConnectionId($('#userid').val());
 
-                $('#balloon').click(function () {
-                    $('#notiflist').toggle(200);
-                    document.getElementById("counter").innerHTML = 0;
-                    $('#notiflist tbody tr').css("background-color", "#f6f3f7");
+                $('#pressme').click(function () {
+                    if ($('#notiftable').is(":visible")) {
+                        $('#notiftable').toggle(200);
+                    } else {
+                        $('#notiftable').toggle(200);
+                        document.getElementById("counter").innerHTML = 0;
+                        $('#counter').hide();
+                        $('#notiftable tbody tr').css("background-color", "#fff");
+                    }
 
                 });
             });

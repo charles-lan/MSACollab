@@ -21,7 +21,8 @@ namespace NotificationSignalR.Controllers
         // GET: api/Notifications
         public IQueryable<Notification> GetNotifications()
         {
-            return db.Notifications;
+            return db.Notifications
+                .Include(b => b.Recipients);
         }
 
         // GET: api/Notifications/5
@@ -46,7 +47,7 @@ namespace NotificationSignalR.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != notification.ID)
+            if (id != notification.NotiID)
             {
                 return BadRequest();
             }
@@ -81,15 +82,21 @@ namespace NotificationSignalR.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            db.Notifications.Add(notification);
-            db.SaveChanges();
+            try {
+                db.Notifications.Add(notification);
+                
+                db.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                return BadRequest();
+            }
 
             var _context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
             _context.Clients.All.receiveNotification(notification.title);
 
 
-            return CreatedAtRoute("DefaultApi", new { id = notification.ID }, notification);
+            return CreatedAtRoute("DefaultApi", new { id = notification.NotiID }, notification);
         }
 
         // DELETE: api/Notifications/5
@@ -119,7 +126,7 @@ namespace NotificationSignalR.Controllers
 
         private bool NotificationExists(int id)
         {
-            return db.Notifications.Count(e => e.ID == id) > 0;
+            return db.Notifications.Count(e => e.NotiID == id) > 0;
         }
     }
 }

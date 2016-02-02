@@ -4,55 +4,54 @@
 }
 
 
-<table>
-    <tr>
-        <td class="msgcontainer">
-            Notification
-            <br />
-            <br />
-            <input type="text" id="message" value="Enter your message here" size="100"/>
-            <input type="button" id="sendmessage" value="Send" />
-        </td>
-        <td >
-            <table class="userlistcontainer">
-                <thead>
-                    <tr>
-                        <td>User online</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <ul id="userlist">
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <table id="notiftable">
-                <thead>
-                    <tr>
-                        <td>
-                            UserID
-                        </td>
-                        <td>
-                            Message
-                        </td>
-                        <td>
-                            Time sent
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-</table>
+    <table>
+        <tr>
+            <td class="msgcontainer">
+                Notification
+                <br />
+                <br />
+                <input type="text" id="message" value="Enter your message here" size="100" />
+                <input type="button" id="sendmessage" value="Send" />
+            </td>
+            <td>
+                <table class="userlistcontainer">
+                    <thead>
+                        <tr>
+                            <td>User online</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <ul id="userlist"></ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table id="notiftable">
+                    <thead>
+                        <tr>
+                            <td>
+                                UserID
+                            </td>
+                            <td>
+                                Message
+                            </td>
+                            <td>
+                                Time sent
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+
 
 
 
@@ -67,11 +66,7 @@
 
             var selectedusers = [];
 
-            nhub.client.receiveNotification = function (message) {
-                $("#popUpContainer").html(message);
-                $("#popUpContainer").slideDown(2000);
-                setTimeout('$("#popUpContainer").slideUp(2000);', 2000);
-            };
+            
 
             nhub.client.addMessageToAdmin = function (userid, message, time) {
 
@@ -92,7 +87,7 @@
                     anchor.onclick = function () {
                         if (jQuery.inArray(this.innerHTML, selectedusers) >= 0) {
                             var index = jQuery.inArray(this.innerHTML, selectedusers);
-                            this.style.backgroundColor = "rgb(254, 143, 69)";
+                            this.style.backgroundColor = "#f8f8f8";
                             selectedusers.splice(index, 1);
                         } else {
                             selectedusers.push(this.innerHTML);

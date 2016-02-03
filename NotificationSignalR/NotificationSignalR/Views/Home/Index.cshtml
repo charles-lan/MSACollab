@@ -13,8 +13,8 @@
                 <td>{{r.ID}}</td>
                 <td>{{r.title}}</td>
                 <td>{{r.desc}}</td>
-
-            </tr>
+                <td><b ng-repeat="u in r.Recipients | orderBy:'+UserId'" > {{u.UserId}}{{$last ? '' : ', '}}</b></td>
+                
 
         </table>
 

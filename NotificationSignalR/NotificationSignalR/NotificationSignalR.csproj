@@ -220,17 +220,30 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
+    <Compile Include="Controllers\UserNotificationsController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\NotificationHub.cs" />
-    <Compile Include="Migrations\201601192235092_initialCreate.cs" />
-    <Compile Include="Migrations\201601192235092_initialCreate.Designer.cs">
-      <DependentUpon>201601192235092_initialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201601290021101_foo.cs" />
+    <Compile Include="Migrations\201601290021101_foo.Designer.cs">
+      <DependentUpon>201601290021101_foo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601290026153_testings.cs" />
+    <Compile Include="Migrations\201601290026153_testings.Designer.cs">
+      <DependentUpon>201601290026153_testings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601290053431_test2.cs" />
+    <Compile Include="Migrations\201601290053431_test2.Designer.cs">
+      <DependentUpon>201601290053431_test2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\NotificationSignalRContext.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -277,6 +290,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\custom\Chat.js" />
     <Content Include="Scripts\custom\NotiClient.js" />
+    <Content Include="Scripts\custom\UserClient.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
@@ -307,17 +321,23 @@
     <Content Include="Views\Home\Notification.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201601192235092_initialCreate.resx">
-      <DependentUpon>201601192235092_initialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201601290021101_foo.resx">
+      <DependentUpon>201601290021101_foo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601290026153_testings.resx">
+      <DependentUpon>201601290026153_testings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601290053431_test2.resx">
+      <DependentUpon>201601290053431_test2.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

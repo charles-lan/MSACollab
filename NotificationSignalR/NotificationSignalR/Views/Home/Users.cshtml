@@ -1,63 +1,21 @@
-﻿
-@{
-    ViewBag.Title = "Users";
+﻿@section scripts{
+
+    <script src="~/Scripts/custom/UserClient.js"></script>
 }
 
-<h2>Users</h2>
-
-<body>
-        Connection ID: <div id="userid"></div>
-        <input type="checkbox" name="groups" value= "g1"/> Group 1
-        <input type="checkbox" name="groups" value ="g2"/> Group 2
-        <input type="checkbox" name="groups" value ="g3"/> Group 3
-        <input type="button" id="join" value="Join" />
+<div ng-app="UserApp" class="container">
     <br />
-    <table id="notiflist">
-        <thead>
-            <tr>
-                <td>Group Name</td>
-                <td>Notification</td>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</body>
+    <br />
+    <input type="search" placeholder="Search Username" ng-model="userName" />
+    <br />
+    <div ng-controller="UserController">
+        <div ng-controller="NotiController">
+            <table class="table">
+                <tr ng-repeat="r in usernotifs | orderBy:'-'">
+                    <td>{{notis[r.NotiID].desc}}</td>
+                    <td><b ng-repeat="u in notis[r.NotiID].Recipients | orderBy:'+UserId'"> {{u.UserId}}{{$last ? '' : ', '}}</b></td>
+            </table>
+        </div>
+    </div>
 
-@section scripts {
-    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
-    <script src="~/signalr/hubs"></script>
-    <script>
-        $(function () {
-            var nhub = $.connection.notifHub;
-
-            nhub.client.getUserId = function (connectionid) {
-                $('#userid').append(connectionid);
-            }
-
-            nhub.client.sendMessageToUser = function (groupname, message) {
-                if (groupname == "g1") {
-                    $('#notiflist tbody').append('<tr><td>' + "Group1" + '</td><td>' + message + '</td></tr>');
-                } else if (groupname == "g2") {
-                    $('#notiflist tbody').append('<tr><td>' + "Group2" + '</td><td>' + message + '</td></tr>');
-                } else if (groupname == "g3") {
-                    $('#notiflist tbody').append('<tr><td>' + "Group3" + '</td><td>' + message + '</td></tr>');
-                } else {
-                    $('#notiflist tbody').append('<tr><td>' + "All" + '</td><td>' + message + '</td></tr>');
-                }
-            }
-
-            $.connection.hub.start().done(function () {
-                $('#join').click(function () {
-                    var checkedval = $('input[name="groups"]:checked').map(function () {
-                        return $(this).val();
-                    }).get();
-
-                    for (var i = 0; i < checkedval.length; i++) {
-                        nhub.server.joinGroup(checkedval[i]);
-                    }
-                });
-            });
-        });
-   </script>
-}
+</div>

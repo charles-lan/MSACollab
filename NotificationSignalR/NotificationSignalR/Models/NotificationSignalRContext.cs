@@ -20,5 +20,11 @@ namespace NotificationSignalR.Models
         }
 
         public System.Data.Entity.DbSet<NotificationSignalR.Models.Notification> Notifications { get; set; }
+
+        public System.Data.Entity.DbSet<NotificationSignalR.Models.Connection> Connections { get; set; }
+
+        public System.Data.Entity.DbSet<NotificationSignalR.Models.User> Users { get; set; }
+
+        public System.Data.Entity.DbSet<NotificationSignalR.Models.UserNotification> UserNotifications { get; set; }
     }
 }

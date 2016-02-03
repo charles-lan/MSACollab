@@ -261,6 +261,8 @@
     <Content Include="Scripts\angular-resource.min.js" />
     <Content Include="Scripts\angular-route.js" />
     <Content Include="Scripts\angular-route.min.js" />
+    <Content Include="Scripts\angular-signalr-hub.js" />
+    <Content Include="Scripts\angular-signalr-hub.min.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />

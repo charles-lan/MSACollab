@@ -22,18 +22,37 @@ namespace NotificationSignalR.Controllers
             return db.UserNotifications;
         }
 
+        //// GET: api/UserNotifications/5 ORIGINAL
+        //[ResponseType(typeof(UserNotification))]
+        //public IHttpActionResult GetUserNotification(int id)
+        //{
+        //    UserNotification userNotification = db.UserNotifications.Find(id);
+        //    if (userNotification == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(userNotification);
+        //}
+
+
         // GET: api/UserNotifications/5
-        [ResponseType(typeof(UserNotification))]
         public IHttpActionResult GetUserNotification(int id)
         {
-            UserNotification userNotification = db.UserNotifications.Find(id);
-            if (userNotification == null)
+            var userNotificationss = db.UserNotifications
+                .Include(a => a.Notification)
+                .Where(b => b.UserId == id);
+
+
+            if (userNotificationss == null)
             {
                 return NotFound();
             }
 
-            return Ok(userNotification);
+            return Ok(userNotificationss);
         }
+
+
 
         // PUT: api/UserNotifications/5
         [ResponseType(typeof(void))]

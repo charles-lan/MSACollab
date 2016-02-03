@@ -86,7 +86,8 @@ namespace NotificationSignalR.Controllers
             db.SaveChanges();
 
             var _context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
-            _context.Clients.All.receiveNotification(notification.title);
+            
+            _context.Clients.All.receiveMessage(notification.title);
 
 
             return CreatedAtRoute("DefaultApi", new { id = notification.ID }, notification);

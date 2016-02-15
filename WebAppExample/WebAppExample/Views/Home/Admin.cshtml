@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Notification";
+    ViewBag.Title = "Admin";
 }
 
 
@@ -56,13 +56,16 @@
 
 
 @section scripts {
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
-    <script src="~/signalr/hubs"></script>
-    <link href="~/css/notification.css" rel="stylesheet" />
+    <script src="http://notificationhubapi.azurewebsites.net/signalr/hubs"></script>
+    <link href="~/CSS/style.css" rel="stylesheet" />
     <script>
         $(function () {
 
-            var nhub = $.connection.notifHub;
+            $.connection.hub.url = "http://notificationhubapi.azurewebsites.net/signalr";
+
+            var nhub = $.connection.notificationHub;
 
             var selectedusers = [];
 
@@ -99,6 +102,8 @@
                     ul.appendChild(newuser);
                 }
             }
+
+
 
             nhub.client.receiveMessage = function (message, username) {
                 nhub.server.sendMessageOnPost(username, val());

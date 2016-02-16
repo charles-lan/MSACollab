@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>User</h2>
+
+    <div class="customcontainer">
+        <div id="idpanel"></div> <span id="popupmsg"></span>
+        <input type="hidden" id="userid" />
+        <br />
+        <div class="balloon">
+            <input type="button" id="pressme" value="Press Me!" /> <span id="counter">0</span>
+        </div>
+        <ul id="notiflist">
+            <li>Notification</li>
+        </ul>
+    </div>
+
+@section scripts {
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="http://notificationhubapi.azurewebsites.net/signalr/hubs"></script>
+    <link href="~/CSS/style.css" rel="stylesheet" />
+    <script>
+        $(function () {
+
+            $.connection.hub.url = "http://notificationhubapi.azurewebsites.net/signalr";
+
+            var nhub = $.connection.notificationHub;
+
+            var username = "@ViewBag.userid";
+
+            document.getElementById("idpanel").innerHTML = username;
+
+            nhub.client.foo = function () {
+            }
+
+            nhub.client.addmessagetouser = function (message, time) {
+
+                var newMessage = document.createElement("div");
+                var newTime = document.createElement("div");
+                var anchor = document.createElement("a");
+                var newli = documnet.createElement("li");
+                
+                var msgtxt = document.createTextNode(message);
+                var timetxt = document.createTextNode(time);
+
+                newMessage.appendChild(msgtxt);
+                newTime.appendChild(timetxt);
+                
+                anchor.appendChild(newMessage);
+                anchor.appendChild(newTime);
+                anchor.id = message;
+                anchor.onclick = function () {
+                    this.backgroundColor = "#f8f8f8";
+                    return false;
+                }
+
+
+                newtr.style.backgroundColor = "yellow";
+
+                $('#notiftable tbody').append(newtr);
+
+                $('#counter').show();
+                var total = document.getElementById("counter").innerHTML;
+                total = parseInt(total, 10) + 1;
+                document.getElementById("counter").innerHTML = total;
+
+                $("#popupmsg").html(message);
+                $("#popupmsg").slideDown(2000); 
+                setTimeout('$("#popupmsg").slideUp(2000);', 2000);
+
+                // (+) send api notification.isread = true;
+            }
+
+
+            $.connection.hub.start().done(function () {
+
+                $('#popupmsg').hide();
+                $('#counter').hide();
+                $('#notiftable').hide();
+
+                var myClientId = $.connection.hub.id;
+
+                $('#pressme').click(function () {
+                    if ($('#notiftable').is(":visible")) {
+                        $('#notiftable').toggle(200);
+                    } else {
+                        $('#notiftable').toggle(200);
+                        document.getElementById("counter").innerHTML = 0;
+                        $('#counter').hide();
+                        $('#notiftable tbody tr').css("background-color", "#fff");
+                    }
+
+                });
+            });
+        });
+
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+    </script>
+}

@@ -4,53 +4,53 @@
 }
 
 
-    <table>
-        <tr>
-            <td class="msgcontainer">
-                Notification
-                <br />
-                <br />
-                <input type="text" id="message" value="Enter your message here" size="100" />
-                <input type="button" id="sendmessage" value="Send" />
-            </td>
-            <td>
-                <table class="userlistcontainer">
-                    <thead>
-                        <tr>
-                            <td>User online</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <ul id="userlist"></ul>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <table id="notiftable">
-                    <thead>
-                        <tr>
-                            <td>
-                                UserID
-                            </td>
-                            <td>
-                                Message
-                            </td>
-                            <td>
-                                Time sent
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </td>
-        </tr>
-    </table>
+<table>
+    <tr>
+        <td class="msgcontainer">
+            Notification
+            <br />
+            <br />
+            <input type="text" id="message" value="Enter your message here" size="100" />
+            <input type="button" id="sendmessage" value="Send" />
+        </td>
+        <td>
+            <table class="userlistcontainer">
+                <thead>
+                    <tr>
+                        <td>User online</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <ul id="userlist"></ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table id="notiftable">
+                <thead>
+                    <tr>
+                        <td>
+                            UserID
+                        </td>
+                        <td>
+                            Message
+                        </td>
+                        <td>
+                            Time sent
+                        </td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </td>
+    </tr>
+</table>
 
 
 
@@ -66,7 +66,7 @@
 
             var selectedusers = [];
 
-            
+
 
             nhub.client.addMessageToAdmin = function (userid, message, time) {
 
@@ -77,7 +77,6 @@
 
                 if ($('#userlist li:contains(' + userid + ')').length) {
                     return;
-                    //(+) set li colour = backgroundColour;
                 } else {
                     var newuser = document.createElement("li");
                     var ul = document.getElementById("userlist");
@@ -93,12 +92,16 @@
                             selectedusers.push(this.innerHTML);
                             this.style.backgroundColor = "rgb(255, 201, 14)";
                         }
-                        
+
                     }
 
                     newuser.appendChild(anchor);
                     ul.appendChild(newuser);
                 }
+            }
+
+            nhub.client.receiveMessage = function (message, username) {
+                nhub.server.sendMessageOnPost(username, val());
             }
 
 
@@ -114,7 +117,7 @@
                         alert("You must select an user");
                     } else {
                         var jsonString = JSON.stringify(selectedusers);
-                        nhub.server.sendMessage(jsonString, $('#message').val());
+                        nhub.server.sendMessageOnChat(jsonString, $('#message').val());
                         $('#message').val('').focus();
                     }
                 });

@@ -11,7 +11,6 @@ namespace NotificationSignalR.Models
         [Key]
         public int UserID { get; set; }
         public string UserName { get; set; }
-        public ICollection<Connection> Connections { get; set; }
 
         public ICollection<UserNotification> UserNotifications { get; set; }
     }
